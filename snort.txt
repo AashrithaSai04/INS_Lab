@@ -1,0 +1,55 @@
+# EXPERIMENT – 10: Intrusion Detection System (IDS) using Snort
+
+## AIM
+
+To demonstrate an Intrusion Detection System (IDS) using Snort and a custom detection rule.
+
+## DESCRIPTION
+
+An Intrusion Detection System (IDS) monitors network traffic or host activity and generates alerts when traffic matches known suspicious patterns.
+
+Snort is a widely used network IDS/IPS tool that inspects network packets and applies rule-based signatures.
+
+- Snort captures and inspects network packets.
+- Detection rules specify the traffic characteristics that generate alerts.
+- When matching traffic is detected, Snort generates an alert.
+- In this experiment, an ICMP rule is used to detect ping traffic in a controlled laboratory network.
+
+## PROCEDURE
+
+1. Install Snort using the following commands:
+   
+   sudo apt update
+   sudo apt install snort -y
+   
+2. Identify the active network interface:
+   
+   ip -br addr
+   
+3. Open the local Snort rule file:
+   
+   sudo nano /etc/snort/rules/local.rules
+   
+4. Add the following ICMP detection rule:
+   
+   alert icmp any any -> any any (msg:"LAB ICMP Ping Detected"; sid:1000001; rev:1;)
+   
+5. Save the file and test the Snort configuration:
+   
+   sudo snort -T -c /etc/snort/snort.conf
+   
+6. Start Snort in IDS mode using the network interface:
+   
+   sudo snort -A console -q -c /etc/snort/snort.conf -i eth0
+   
+7. Open another terminal and generate controlled ICMP traffic:
+   
+   ping -c 4 192.168.1.20
+   
+   Replace the IP address and interface with those of your authorized lab network.
+8. Observe the Snort console for the generated alert.
+9. Stop Snort using `Ctrl + C`.
+
+## CONCLUSION
+
+The Snort-based IDS successfully demonstrates signature-based network intrusion detection. A custom ICMP rule was used to identify ping traffic and generate an alert. This experiment demonstrates how Snort monitors network packets and detects traffic matching predefined rules.
